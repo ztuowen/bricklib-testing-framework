@@ -1,0 +1,4 @@
+config*
+**/out/*
+gen/*
+core
