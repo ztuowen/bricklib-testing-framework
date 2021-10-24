@@ -135,7 +135,7 @@ def gen_script_vars_file(kernel_dir, kernels, setup_funcs, run_funcs):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--config", default="config.jsonc")
+    parser.add_argument("--config", default="config.json")
     parser.add_argument("--backend", required=True, choices=['hip', 'cuda'])
 
     args = parser.parse_args()
