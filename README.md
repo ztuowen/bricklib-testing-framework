@@ -10,7 +10,7 @@ The python script `setup-tests.py` creates all of the needed C++ files to run th
 ## Config File Format
 The tests are configured with a JSON format file. The default config file is `config.json` but it can be overwritten when running `setup-tests.py` with the script flag `--config [path to config file]`
 
-```json
+```jsonc
 {
 	"bricklib-path": // absolute path to the root bricklib directory
 	"dimensions": // an array of dimensions of the input array in order [x, y, z]
