@@ -37,3 +37,29 @@ The tests are configured with a JSON format file. The default config file is `co
 	}
 }
 ```
+
+## Generating and Compiling the Tests
+Once you have specified the testing configuration file, you can use the core python script to generate the required files.
+Run the script with `python setup-tests.py --backend [hip or cuda] --config [optional path to config file]`
+The output file name and location should be specified via the "compiler-flags" option (ex. -o out/test)
+
+## Adding New Kernels
+The file generation makes significant use of a known file structure in order to locate needed files.
+In order to add new kernels, use the following steps:
+1. add a directory with the kernel name under the "kernels" directory.
+1. add a file called [kernel name]-stencils.cu under the new directory.
+	1. write the kernel code into this file.
+	1. each kernel function name should follow the format [kernel name]_[version]_[size]
+	1. "version" is one of naive, codegen, naive_bricks, or codegen_bricks
+	1. the naive and codegen function versions must take arguments `(bElem (*in)[STRIDE1][STRIDE0], bElem (*out)[STRIDE1][STRIDE0])`
+	1. the naive_bricks and codegen_bricks must take the arguments `(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType bIn, BType bOut)`
+1. add a file called [kernel name]-stencils.h under the new directory.
+	- this file should contain the function header declarations for all the functions defined in [kernel name]-stencils.cu.
+	- the file generations script uses [kernel name]-stencils.h as a starting point for generating the kernel header file.
+1. be sure that [kernel name]-stencils.cu contains the line `#include "./laplacian-stencils.h`.
+1. add codegenerations script files to the kernel directory. 
+	- these script files should follow the fomat codegen-[backend].sh where backend is one of hip, or cuda.
+	- the script files should contain the bash command that will be used to run bricklib code generation on the kernels.
+
+
+
