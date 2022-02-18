@@ -39,8 +39,8 @@ class KernelConfigApplier:
                 if header_scanning:
                     if line.strip().startswith("//") and "$START" in line:
                         header_scanning = False
-                        break
-                    header += line
+                    else:
+                        header += line
 
                 if start_scanning:
                     if line.strip().startswith("//") and "$START" in line:
@@ -95,7 +95,7 @@ class KernelConfigApplier:
                             if type not in default_written:
                                 f.write(code)
                                 default_written.append(type)
-                            f.write(f"#define {type}{size}(")
+                            f.write(f"#define {self.kernel_name}_{type}{size}(")
                             for i in range(0, len(args)):
                                 if i != size_replace_index:
                                     f.write(chr(i+97))
