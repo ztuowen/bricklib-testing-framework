@@ -1,0 +1,133 @@
+{
+    "kernel_name": "laplacian",
+    "c_template": "laplacian-stencils.cu",
+    "python_template": "laplacian.py",
+    "naive": {
+        "function": "laplacian_naive",
+        "arguments": [
+            {
+                "generator": "random",
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "zeros",
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "sequence",
+                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+                "type": "array",
+                "array": {
+                    "dimensions": [10],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "size",
+                "type": "const size_t"
+            }
+        ]
+    },
+    "naive-bricks": {
+        "function": "laplacian_naive_bricks",
+        "arguments": [
+            {
+                "generator": "brick-grid",
+                "type": "array",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "generator": "random",
+                "type": "brick-pointer"
+            },
+            {
+                "generator": "zeros",
+                "type": "brick-pointer"
+            },
+            {
+                "generator": "sequence",
+                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+                "type": "array",
+                "array": {
+                    "dimensions": [10],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "size",
+                "type": "size_t"
+            }
+        ]
+    },
+    "codegen": {
+        "function": "laplacian_codegen",
+        "arguments": [
+            {
+                "generator": "random",
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "zeros",
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "generator": "sequence",
+                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+                "type": "array",
+                "array": {
+                    "dimensions": [10],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "bricks-codegen": {
+        "function": "laplacian_codegen_bricks",
+        "arguments": [
+            {
+                "generator": "brick-grid",
+                "type": "array",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "generator": "random",
+                "type": "brick-pointer"
+            },
+            {
+                "generator": "zeros",
+                "type": "brick-pointer"
+            },
+            {
+                "generator": "sequence",
+                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+                "type": "array",
+                "array": {
+                    "dimensions": [10],
+                    "type": "bElem"
+                }
+            }
+        ]
+    }
+}
