@@ -108,7 +108,7 @@
             }
         ]
     },
-    "bricks-codegen": {
+    "codegen-bricks": {
         "function": "laplacian_codegen_bricks",
         "arguments": [
             {

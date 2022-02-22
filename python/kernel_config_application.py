@@ -19,7 +19,6 @@ def array_generation(array_name: str, details, device_array_name: str = None):
     elif details["generator"] == "random":
         code = f"{details['type']} *{array_name} = randomArray(" + "{" + ",".join([str(e) for e in details["dimensions"]]) + "});\n"
     elif details["generator"] == "sequence":
-        print(details)
         code = f"{details['type']} {array_name}[] = " + "{" + ",".join([str(e) for e in details["sequence"]]) + "};\n"
     else:
         raise RuntimeError(f"Unknown generator: {details['generator']}")
@@ -234,8 +233,6 @@ class KernelConfigApplier:
                     for type in codes.keys():
                         code = codes[type]
                         if "codegen" in type:
-
-
                             code = code \
                                 .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
                                 .replace(self.config[type]["function"], f"{self.kernel_name}_{type.replace('-','_')}{size}", 1)

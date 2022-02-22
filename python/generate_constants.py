@@ -47,7 +47,6 @@ def gen_consts_file(backend, config):
         decoded = json.load(j)
 
     consts = collect_constants(decoded, backend)
-    gen_consts_file(consts, backend)
 
     cwd = os.getcwd()
     if "gen" not in os.listdir(cwd):

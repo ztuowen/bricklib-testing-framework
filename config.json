@@ -8,7 +8,8 @@
         "brick-dimensions": [16, 8, 8],
         "fold": "8,8",
         "compiler": "hipcc",
-        "compiler-flags": ["-O2", "-fopenmp", "-o", "./out/tester"]
+        "compiler-flags": ["-O2", "-fopenmp", "-o", "./out/tester"],
+        "codegen-flags": ["-c", "cpp", "--", "-DBACKEND=1", "-fopenmp", "-O2", "-I../bricklib/include", "-D__HIP_PLATFORM_HCC__=", "-I/sw/spock/spack-envs/views/rocm-4.1.0/llvm/bin/../lib/clang/12.0.0", "-I/sw/spock/spack-envs/views/rocm-4.1.0/include", "-D__HIP_ROCclr__"]
     },
     "cuda": {
         "vecsize": 32,
@@ -17,7 +18,7 @@
     "kernel-directory": "kernels",
     "kernels": {
         "laplacian": {
-            "sizes": [13],
+            "sizes": [2],
             "versions": ["naive", "codegen", "naive-bricks", "codegen-bricks"],
             "verify": true
         }
