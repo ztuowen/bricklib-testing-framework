@@ -3,10 +3,10 @@
 #include "vecscatter.h"
 #include "brick.h"
 
-#include "../out/laplacian-stencils.h"
+// #include "../out/laplacian-stencils.h"
 
 // $START naive
-__device__ void laplacian_naive(bElem (*in)[STRIDE1][STRIDE0], bElem (*out)[STRIDE1][STRIDE0], bElem* dev_coeff, const size_t radius) {
+__global__ void laplacian_naive(bElem (*in)[STRIDE1][STRIDE0], bElem (*out)[STRIDE1][STRIDE0], bElem* dev_coeff, const size_t radius) {
     unsigned i = OFF0 + (blockIdx.x) * TILE0 + threadIdx.x;
     unsigned j = OFF1 + (blockIdx.y) * TILE1 + threadIdx.y;
     unsigned k = OFF2 + (blockIdx.z) * TILE2 + threadIdx.z;
@@ -23,7 +23,7 @@ __device__ void laplacian_naive(bElem (*in)[STRIDE1][STRIDE0], bElem (*out)[STRI
 // $END naive
 
 // $START naive-bricks
-__device__ void laplacian_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType &bIn, BType &bOut, bElem *dev_coeff, size_t radius) {
+__global__ void laplacian_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType &bIn, BType &bOut, bElem *dev_coeff, size_t radius) {
     unsigned b = grid[blockIdx.z + GB2][blockIdx.y + GB1][blockIdx.x + GB0];
     unsigned i = threadIdx.x;
     unsigned j = threadIdx.y;

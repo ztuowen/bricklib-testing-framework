@@ -1,33 +1,34 @@
 {
     "kernel_name": "laplacian",
     "c_template": "laplacian-stencils.cu",
+    "h_template": "laplacian.h",
     "python_template": "laplacian.py",
     "naive": {
         "function": "laplacian_naive",
         "arguments": [
             {
-                "generator": "random",
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
                     "type": "bElem"
                 }
             },
             {
-                "generator": "zeros",
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
                     "type": "bElem"
                 }
             },
             {
-                "generator": "sequence",
-                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
                 "type": "array",
                 "array": {
+                    "generator": "sequence",
                     "dimensions": [10],
-                    "type": "bElem"
+                    "type": "bElem",
+                    "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
                 }
             },
             {
@@ -40,28 +41,35 @@
         "function": "laplacian_naive_bricks",
         "arguments": [
             {
-                "generator": "brick-grid",
-                "type": "array",
+                "type": "brick-grid",
                 "array": {
                     "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
                     "type": "unsigned"
                 }
             },
             {
-                "generator": "random",
-                "type": "brick-pointer"
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
             },
             {
-                "generator": "zeros",
-                "type": "brick-pointer"
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
             },
             {
-                "generator": "sequence",
-                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
                 "type": "array",
                 "array": {
+                    "generator": "sequence",
                     "dimensions": [10],
-                    "type": "bElem"
+                    "type": "bElem",
+                    "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
                 }
             },
             {
@@ -74,28 +82,28 @@
         "function": "laplacian_codegen",
         "arguments": [
             {
-                "generator": "random",
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
-                    "type": "bElem"
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem",
+                    "generator": "random"
                 }
             },
             {
-                "generator": "zeros",
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE2", "STRIDE1", "STRIDE0"],
-                    "type": "bElem"
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem",
+                    "generator": "zeros"
                 }
             },
             {
-                "generator": "sequence",
-                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
                 "type": "array",
                 "array": {
+                    "generator": "sequence",
                     "dimensions": [10],
-                    "type": "bElem"
+                    "type": "bElem",
+                    "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
                 }
             }
         ]
@@ -104,28 +112,35 @@
         "function": "laplacian_codegen_bricks",
         "arguments": [
             {
-                "generator": "brick-grid",
-                "type": "array",
+                "type": "brick-grid",
                 "array": {
                     "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
                     "type": "unsigned"
                 }
             },
             {
-                "generator": "random",
-                "type": "brick-pointer"
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "random",
+                    "type": "bElem",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"]
+                }
             },
             {
-                "generator": "zeros",
-                "type": "brick-pointer"
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
             },
             {
-                "generator": "sequence",
-                "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
                 "type": "array",
                 "array": {
                     "dimensions": [10],
-                    "type": "bElem"
+                    "type": "bElem",
+                    "generator": "sequence",
+                    "sequence": [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
                 }
             }
         ]
