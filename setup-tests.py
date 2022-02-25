@@ -193,6 +193,9 @@ if __name__ == "__main__":
 
     all_kernel_paths = map(lambda k: os.path.join(kernels_dir, "out", f"{k}-stencils-out.cu"), kernels)
     compile_command = [decoded[args.backend]["compiler"], "tester.cu", " ".join(all_kernel_paths), "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper',]
+
+    
+    
     if "compiler-flags" in decoded[args.backend]:
         compile_command.extend(decoded[args.backend]["compiler-flags"])
     

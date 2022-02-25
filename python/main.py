@@ -3,6 +3,7 @@ from kernel_config_application import KernelConfigApplier
 from argparse import ArgumentParser
 import os
 import json
+import subprocess
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -27,8 +28,9 @@ if __name__ == "__main__":
     for k in kernel_objects:
         k.generate_intermediate_code().run_codegen_vecscatter(vecscatter_path, python="python3", extras=decoded[args.backend]["codegen-flags"])
         to_call.extend(k.wrap_functions())
-    
-    with open(os.path.join(cwd, "main.cpp"), "w") as f:
+
+    compile_files=[]
+    with open(os.path.join(cwd, "main.cu"), "w") as f:
         f.write('#include "./gen/consts.h"\n')
         f.write(f'#include <brick-{args.backend}.h>\n')
         f.write("""#include <iostream>
@@ -43,15 +45,19 @@ if __name__ == "__main__":
 """)
         for kernel_name in kernels.keys():
             f.write(f'#include "./kernels/{kernel_name}/gen/{kernel_name}.h"\n')
-
+            compile_files.append(f"./kernels/{kernel_name}/gen/{kernel_name}.cu")
+            
         f.write("typedef void (*kernel)();\n")
         f.write("int main(void) {\n")
         f.write("\t kernel kernels[] = {")
         f.write(",".join(to_call))
         f.write("};\n")
         
-        f.write(f"\tfor (int i = 0; i < {len(to_call)}; i++) " + "{\n")
-        f.write("\t\tto_call[i];\n")
-        f.write("\t}\n")
+        #f.write(f"\tfor (int i = 0; i < {len(to_call)}; i++) " + "{\n")
+        #f.write("\t\tto_call[i];\n")
+        #f.write("\t}\n")
 
         f.write("}\n")
+    print(compile_files)
+    subprocess.run([decoded[args.backend]["compiler"], "main.cu", *compile_files, *(decoded[args.backend]["compiler-flags"]), "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper',])    
+    

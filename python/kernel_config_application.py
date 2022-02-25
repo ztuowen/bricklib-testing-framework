@@ -1,4 +1,3 @@
-from genericpath import isdir
 import json
 from re import template
 from typing import List
@@ -104,21 +103,26 @@ class KernelConfigApplier:
         for i in range(0, len(brick_args)):
             wrapped += f"brick{i} = BType(device_binfo, device_bstorage, brick_size * {i});\n"
         
-        other_args = [e["array"] for e in self.config[t]["arguments"] if e["type"] == "array"]
+        other_args = [e for e in self.config[t]["arguments"] if e["type"] == "array"]
         for i,a in enumerate(other_args):
-            wrapped += array_generation(f"local_arr{i}", a, f"device_arr{i}")
+            wrapped += array_generation(f"local_arr{i}", a["array"], f"device_arr{i}")
 
         ### EXECUTE
         wrapped += f"printf(\"Executing {t} {self.kernel_name}, size {size}\\n\");\n"
-        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2), device_bgrid, "
+        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2),"
+        if len(brick_grid_params["dimensions"]) > 1:
+            wrapped += "(" + brick_grid_params["type"] + "(*)[" + "][".join(brick_grid_params["dimensions"][1:]) + "])"
+        else:
+            wrapped += "(" + brick_grid_params["type"] + "*)"
+        wrapped += "device_bgrid"
         for i in range(0, len(brick_args)):
-            wrapped += f"brick{i}"
-            if i != len(brick_args) - 1:
-                wrapped += ","
+            wrapped += f", brick{i}"
         for i in range(0, len(other_args)):
-            wrapped += f"device_arr{i}"
-            if i != len(other_args) - 1:
-                wrapped += ","
+            if len(other_args[i]["array"]["dimensions"]) > 1:
+                type_coalesce = other_args[i]["array"]["type"] + "(*)[" + "][".join(other_args[i]["array"]["dimensions"][::-1][1:]) + "]"
+            else:
+                type_coalesce = f"{other_args[i]['array']['type']} *"
+            wrapped += f", ({type_coalesce}) device_arr{i}"
         wrapped += ");\n"
         wrapped += "gpuDeviceSynchronize();\n"
 
@@ -145,7 +149,11 @@ class KernelConfigApplier:
         wrapped += f"printf(\"Executing {t} {self.kernel_name}, size {size}\\n\");\n"
         wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2), "
         for i in range(0, len(arguments)):
-            wrapped += f"dev_arg{i}"
+            if len(arguments[i]["array"]["dimensions"]) > 1:
+                type_coalesce = arguments[i]["array"]["type"] + "(*)[" + "][".join(arguments[i]["array"]["dimensions"][::-1][1:]) + "]"
+            else:
+                type_coalesce = f"{arguments[i]['array']['type']}*"
+            wrapped += f"({type_coalesce}) dev_arg{i}"
             if i != len(arguments) - 1:
                 wrapped += ", "
         wrapped += ");\n"
@@ -208,7 +216,7 @@ class KernelConfigApplier:
     def generate_intermediate_code(self):
         (header, codes) = self._collect_c_template_code()
         gen_dir = path.join(self.kernel_path, "intermediate_gen")
-        if not isdir(gen_dir):
+        if not path.isdir(gen_dir):
             makedirs(gen_dir)
         # generate the python
         temp_name = self.config["python_template"].split(".")[0]
@@ -232,6 +240,20 @@ class KernelConfigApplier:
                 for size in self.sizes:
                     for type in codes.keys():
                         code = codes[type]
+                        new_kernel_name = f"{self.kernel_name}_{type.replace('-','_')}{size}"
+                        code = code \
+                            .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
+                            .replace("$SIZE", str(size)) \
+                            .replace(self.config[type]["function"], new_kernel_name, 1)
+                        # find the function signture and write into header file
+                        for line in code.splitlines():
+                            if new_kernel_name in line:
+                                h.write(line.rstrip().rstrip("{").rstrip())
+                                h.write(";\n")
+                                break
+                        f.write(code)
+                        continue
+                        
                         if "codegen" in type:
                             code = code \
                                 .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
