@@ -19,7 +19,7 @@ if __name__ == "__main__":
     gen_consts_file(args.backend, args.config)
     kernels = decoded["kernels"]
     kernel_objects = map(
-        lambda k: KernelConfigApplier(k, kernels[k]["versions"], kernels[k]["sizes"]),
+        lambda k: KernelConfigApplier(k, kernels[k]["versions"], kernels[k]["sizes"], args.backend),
         kernels.keys()
     )
 
@@ -42,6 +42,7 @@ if __name__ == "__main__":
 #include <cassert>
 #include <string.h>
 #include \"brick.h\"
+#include \"vecscatter.h\"
 """)
         for kernel_name in kernels.keys():
             f.write(f'#include "./kernels/{kernel_name}/gen/{kernel_name}.h"\n')
@@ -52,12 +53,14 @@ if __name__ == "__main__":
         f.write("\t kernel kernels[] = {")
         f.write(",".join(to_call))
         f.write("};\n")
+
         
-        #f.write(f"\tfor (int i = 0; i < {len(to_call)}; i++) " + "{\n")
-        #f.write("\t\tto_call[i];\n")
-        #f.write("\t}\n")
+        f.write(f"\tfor (int i = 0; i < {len(to_call)}; i++) " + "{\n")
+        f.write("\t\tkernels[i]();\n")
+        f.write("\t}\n")
 
         f.write("}\n")
-    print(compile_files)
-    subprocess.run([decoded[args.backend]["compiler"], "main.cu", *compile_files, *(decoded[args.backend]["compiler-flags"]), "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper',])    
-    
+
+    command = [decoded[args.backend]["compiler"], "main.cu", *compile_files, "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper', '-o', 'main', *(decoded[args.backend]["compiler-flags"])]    
+    print(" ".join(command))
+    subprocess.run(command)

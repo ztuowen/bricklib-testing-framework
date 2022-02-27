@@ -32,11 +32,12 @@ def array_generation(array_name: str, details, device_array_name: str = None):
     return code
 
 class KernelConfigApplier:
-    def __init__(self, kernel_name: str, execution_types: List[str], sizes: List[int]):
+    def __init__(self, kernel_name: str, execution_types: List[str], sizes: List[int], backend):
         self.execution_types = execution_types
         self.sizes = sizes
         self.kernel_name = kernel_name
         self.kernel_path = path.join(getcwd(), 'kernels', kernel_name)
+        self.backend = backend
         for t in execution_types:
             if not t in EXECUTION_TYPES:
                 raise RuntimeError("Valid execution types are: " + ", ".join(EXECUTION_TYPES))
@@ -94,7 +95,7 @@ class KernelConfigApplier:
                         code += ", "
                 code += "}, {0,0,0}, "
                 code += f"temp_arr{i}, bgrid, brick{i});\n"
-                code += f"free(temp_arr{i});\n"
+                # code += f"free(temp_arr{i});\n"
 
             brick_input_args.append(code)
         wrapped += "\n".join(brick_input_args)
@@ -109,7 +110,7 @@ class KernelConfigApplier:
 
         ### EXECUTE
         wrapped += f"printf(\"Executing {t} {self.kernel_name}, size {size}\\n\");\n"
-        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2),"
+        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, /* dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2), */ dim3(1,1,1), dim3(1,1,1),"
         if len(brick_grid_params["dimensions"]) > 1:
             wrapped += "(" + brick_grid_params["type"] + "(*)[" + "][".join(brick_grid_params["dimensions"][1:]) + "])"
         else:
@@ -161,7 +162,7 @@ class KernelConfigApplier:
 
         ### CLEANUP
         for i in range(0, len(arguments)):
-            wrapped += f"free(arg{i});\n"
+            # wrapped += f"free(arg{i});\n"
             wrapped += f"gpuFree(dev_arg{i});\n"
 
         wrapped = wrapped.replace("\n", "\n\t")[:-1]
@@ -236,7 +237,8 @@ class KernelConfigApplier:
                 f.write(header)
             
                 f.write('#include "../../../gen/consts.h"\n')
-                f.write('#include "./' + self.kernel_name + '.h"\n\n')
+                f.write('#include "./' + self.kernel_name + '.h"\n')
+                f.write(f"#include <brick-{self.backend}.h>\n\n")
                 for size in self.sizes:
                     for type in codes.keys():
                         code = codes[type]
@@ -254,45 +256,45 @@ class KernelConfigApplier:
                         f.write(code)
                         continue
                         
-                        if "codegen" in type:
-                            code = code \
-                                .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
-                                .replace(self.config[type]["function"], f"{self.kernel_name}_{type.replace('-','_')}{size}", 1)
-                            for line in code.splitlines():
-                                if f"{self.kernel_name}_{type.replace('-','_')}{size}" in line:
-                                    h.write(line.rstrip("{").rstrip())
-                                    h.write(";\n")
-                                    break
+                        # if "codegen" in type:
+                        #     code = code \
+                        #         .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
+                        #         .replace(self.config[type]["function"], f"{self.kernel_name}_{type.replace('-','_')}{size}", 1)
+                        #     for line in code.splitlines():
+                        #         if f"{self.kernel_name}_{type.replace('-','_')}{size}" in line:
+                        #             h.write(line.rstrip("{").rstrip())
+                        #             h.write(";\n")
+                        #             break
                             
-                            f.write(code)
-                        else:
-                            args = self.config[type]["arguments"]
-                            size_replace_index = -1
-                            for (i, arg) in enumerate(args):
-                                if "generator" in arg and arg["generator"] == "size":
-                                    size_replace_index = i
-                                    break
-                            if size_replace_index == -1:
-                                f.write(code)
-                            else:
-                                if type not in default_written:
-                                    f.write(code)
-                                    default_written.append(type)
-                                h.write(f"#define {self.kernel_name}_{type.replace('-', '_')}{size}(")
-                                for i in range(0, len(args)):
-                                    if i != size_replace_index:
-                                        h.write(chr(i+97))
-                                        if i != (len(args) - 2):
-                                            h.write(", ")
-                                h.write(f") {self.config[type]['function']}(")
-                                for i in range(0, len(args)):
-                                    if i != size_replace_index:
-                                        h.write(chr(i + 97))
-                                    else:
-                                        h.write(str(size))
-                                    if i != (len(args) - 1):
-                                        h.write(", ")
-                                h.write(")\n")
+                        #     f.write(code)
+                        # else:
+                        #     args = self.config[type]["arguments"]
+                        #     size_replace_index = -1
+                        #     for (i, arg) in enumerate(args):
+                        #         if "generator" in arg and arg["generator"] == "size":
+                        #             size_replace_index = i
+                        #             break
+                        #     if size_replace_index == -1:
+                        #         f.write(code)
+                        #     else:
+                        #         if type not in default_written:
+                        #             f.write(code)
+                        #             default_written.append(type)
+                        #         h.write(f"#define {self.kernel_name}_{type.replace('-', '_')}{size}(")
+                        #         for i in range(0, len(args)):
+                        #             if i != size_replace_index:
+                        #                 h.write(chr(i+97))
+                        #                 if i != (len(args) - 2):
+                        #                     h.write(", ")
+                        #         h.write(f") {self.config[type]['function']}(")
+                        #         for i in range(0, len(args)):
+                        #             if i != size_replace_index:
+                        #                 h.write(chr(i + 97))
+                        #             else:
+                        #                 h.write(str(size))
+                        #             if i != (len(args) - 1):
+                        #                 h.write(", ")
+                        #         h.write(")\n")
         return self
 
 

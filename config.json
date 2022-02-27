@@ -5,7 +5,7 @@
     "brick-padding": [32, 32, 32],
     "hip": {
         "vecsize": 64,
-        "brick-dimensions": [16, 8, 8],
+        "brick-dimensions": [8, 8, 8],
         "fold": "8,8",
         "compiler": "hipcc",
         "compiler-flags": ["-O2", "-fopenmp", "-o", "./out/tester"],
@@ -19,7 +19,7 @@
     "kernels": {
         "laplacian": {
             "sizes": [2],
-            "versions": ["naive", "codegen", "naive-bricks", "codegen-bricks"],
+            "versions": ["codegen-bricks", "naive-bricks"],
             "verify": true
         }
     }
