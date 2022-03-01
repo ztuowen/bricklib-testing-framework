@@ -1,0 +1,172 @@
+Identifier: "DataSection"
+DisplayName: "Collected Data"
+MetricDefinitions {
+  MetricDefinitions {
+    Name: "l1_loads_requested"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_ld.sum"
+  }
+  MetricDefinitions {
+    Name: "l1_stores_requested"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_st.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_st.sum"
+  }
+  MetricDefinitions {
+    Name: "l1_loads_hit"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld_lookup_hit.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_ld_lookup_hit.sum"
+  }
+  MetricDefinitions {
+    Name: "l1_loads_miss"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld_lookup_miss.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_ld_lookup_miss.sum"
+  }
+  MetricDefinitions {
+    Name: "l1_stores_hit"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_st_lookup_hit.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_st_lookup_hit.sum"
+  }
+  MetricDefinitions {
+    Name: "l1_stores_miss"
+    Expression: "l1tex__t_bytes_pipe_lsu_mem_global_op_st_lookup_miss.sum + l1tex__t_bytes_pipe_lsu_mem_local_op_st_lookup_miss.sum"
+  }
+}
+Metrics {
+  Metrics {
+    Label: "L1 Global Loads Requested"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld.sum"
+  }
+  Metrics {
+    Label: "L1 Global Loads Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld_lookup_hit.sum"
+  }
+  Metrics {
+    Label: "L1 Global Loads Miss"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_ld_lookup_miss.sum"
+  }
+  Metrics {
+    Label: "L1 Global Stores Requested"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_st.sum"
+  }
+  Metrics {
+    Label: "L1 Global Stores Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_st_lookup_hit.sum"
+  }
+  Metrics {
+    Label: "L1 Global Stores Miss"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_global_op_st_lookup_miss.sum"
+  }
+  Metrics {
+    Label: "L1 Local Loads Requested"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_ld.sum"
+  }
+  Metrics {
+    Label: "L1 Local Loads Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_ld_lookup_hit.sum"
+  }
+  Metrics {
+    Label: "L1 Local Loads Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_ld_lookup_miss.sum"
+  }
+  Metrics {
+    Label: "L1 Local Stores Requested"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_st.sum"
+  }
+  Metrics {
+    Label: "L1 Local Stores Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_st_lookup_hit.sum"
+  }
+  Metrics {
+    Label: "L1 Local Stores Hit"
+    Name: "l1tex__t_bytes_pipe_lsu_mem_local_op_st_lookup_miss.sum"
+  }
+}
+Header {
+  Metrics {
+    Label: "FLOPS / sec"
+    Name: "smsp__sass_thread_inst_executed_ops_fadd_fmul_ffma_pred_on.sum.per_second"
+  }
+  Metrics {
+    Label: "Single Precision Ops"
+    Name: "smsp__sass_thread_inst_executed_ops_fadd_fmul_ffma_pred_on.sum"
+  }
+  Metrics {
+    Label: "Single Precision Adds"
+    Name: "smsp__sass_thread_inst_executed_op_fadd_pred_on.sum"
+  }
+  Metrics {
+    Label: "Single Precision Mults"
+    Name: "smsp__sass_thread_inst_executed_op_fmul_pred_on.sum"
+  }
+  Metrics {
+    Label: "Single Precision Add Mults"
+    Name: "smsp__sass_thread_inst_executed_op_ffma_pred_on.sum"
+  }
+  Metrics {
+    Label: "Double Precision FLOPS / sec"
+    Name: "smsp__sass_thread_inst_executed_ops_dadd_dmul_dfma_pred_on.sum.per_second"
+  }
+  Metrics {
+    Label: "Double Precision Ops"
+    Name: "smsp__sass_thread_inst_executed_ops_dadd_dmul_dfma_pred_on.sum"
+  }
+  Metrics {
+    Label: "Double Precision Adds"
+    Name: "smsp__sass_thread_inst_executed_op_dadd_pred_on.sum"
+  }
+  Metrics {
+    Label: "Double Precision Mults"
+    Name: "smsp__sass_thread_inst_executed_op_dmul_pred_on.sum"
+  }
+  Metrics {
+    Label: "Double Precision Add Mults"
+    Name: "smsp__sass_thread_inst_executed_op_dfma_pred_on.sum"
+  }
+  Metrics {
+    Label: "DRAM Bytes Read"
+    Name: "dram__bytes_read.sum"
+  }
+  Metrics {
+    Label: "DRAM Bytes Written"
+    Name: "dram__bytes_write.sum"
+  }
+  Metrics {
+    Label: "Bytes Requested"
+    Name: "l1tex__t_bytes.sum"
+  }
+  Metrics {
+    Label: "L1 Bytes Cache Hit"
+    Name: "l1tex__t_bytes_lookup_hit.sum"
+  }
+  Metrics {
+    Label: "L1 Bytes Cache Miss"
+    Name: "l1tex__t_bytes_lookup_miss.sum"
+  }
+  Metrics {
+    Label: "L2 Bytes Written"
+    Name: "l1tex__m_l1tex2xbar_write_bytes.sum"
+  }
+  Metrics {
+    Label: "L2 Bytes Read Into L1"
+    Name: "l1tex__m_xbar2l1tex_read_bytes.sum"
+  }
+  Metrics {
+    Label: "L1 Reads Requested"
+    Name: "l1_loads_requested"
+  }
+  Metrics {
+    Label: "L1 Writes Requested"
+    Name: "l1_stores_requested"
+  }
+  Metrics {
+    Label: "L1 Reads Hit"
+    Name: "l1_loads_hit"
+  }
+  Metrics {
+    Label: "L1 Reads Miss"
+    Name: "l1_loads_miss"
+  }
+  Metrics {
+    Label: "L1 Writes Hit"
+    Name: "l1_stores_hit"
+  }
+  Metrics {
+    Label: "L1 Writes Miss"
+    Name: "l1_stores_miss"
+  }
+}

@@ -55,10 +55,75 @@ Otherwise, the default executable will be output as `main`
 ## Profiling Kernels
 This code is *not* self-profiling, it requires the use of an external profiling method such as nsight-compute. My suggestions for profiling tools are below:
 
+### NVIDIA Systems
+On NVIDIA machines, I used the Nsight compute CLI tool to profile.
+
+I created a custom data sectioning description that makes this profiling very quick and simple. The code is provided in this repo and can be invoked with the command below:
+
+`ncu --section=DataSection --section-folder-recursive=nsight-sections --section=MemoryWorkloadAnalysis --section=LaunchStats  --kernel-name=regex:'.*' --print-units=base [executable path]`
+
+Note that you can change the `--kernel-name` argument to match a subset of kernels run. However, I suggest removing these kernels from the `config.json` file instead so that they do not waste time in compilation and runtime. 
+
+Example output:
+
+```
+  brick_gen31(unsigned int (*) [66][18], Brick<Dim<8u, 8u, 32u>, Dim<4u, 8u> >, Brick<Dim<8u, 8u, 32u>, Dim<4u, 8u> >), 2021-Aug-05 17:15:34, Context 1, Stream 7
+    Section: Memory Workload Analysis
+    ---------------------------------------------------------------------- --------------- ------------------------------
+    Memory Throughput                                                          byte/second             543,217,437,931.05
+    Mem Busy                                                                             %                          41.87
+    Max Bandwidth                                                                        %                          60.95
+    L1/TEX Hit Rate                                                                      %                           4.08
+    L2 Hit Rate                                                                          %                          56.81
+    Mem Pipes Busy                                                                       %                          35.36
+    ---------------------------------------------------------------------- --------------- ------------------------------
+
+    Section: Launch Statistics
+    ---------------------------------------------------------------------- --------------- ------------------------------
+    Block Size                                                                                                         32
+    Function Cache Configuration                                                                  cudaFuncCachePreferNone
+    Grid Size                                                                                                      65,536
+    Registers Per Thread                                                   register/thread                            176
+    Shared Memory Configuration Size                                                  byte                              0
+    Driver Shared Memory Per Block                                              byte/block                              0
+    Dynamic Shared Memory Per Block                                             byte/block                              0
+    Static Shared Memory Per Block                                              byte/block                              0
+    Threads                                                                         thread                      2,097,152
+    Waves Per SM                                                                                                   102.40
+    ---------------------------------------------------------------------- --------------- ------------------------------
+
+    Section: Collected Data
+    ---------------------------------------------------------------------- --------------- ------------------------------
+    DRAM Bytes Read                                                                   byte                  2,576,346,624
+    DRAM Bytes Written                                                                byte                  1,070,719,648
+    L1 Reads Hit                                                                                              254,987,328
+    L1 Reads Miss                                                                                           4,864,389,344
+    L1 Reads Requested                                                                                      5,119,376,672
+    L1 Writes Hit                                                                                                       0
+    L1 Writes Miss                                                                                          1,073,741,824
+    L1 Writes Requested                                                                                     1,073,741,824
+    L2 Bytes Written                                                                  byte                  1,073,741,824
+    L2 Bytes Read Into L1                                                             byte                  4,862,569,120
+    Bytes Requested                                                                   byte                  6,190,959,520
+    L1 Bytes Cache Hit                                                                byte                    252,828,352
+    L1 Bytes Cache Miss                                                               byte                  5,938,131,168
+    Double Precision Adds                                                             inst                              0
+    Double Precision Add Mults                                                        inst                  4,160,749,568
+    Double Precision Mults                                                            inst                              0
+    Single Precision Adds                                                             inst                              0
+    Single Precision Add Mults                                                        inst                              0
+    Single Precision Mults                                                            inst                              0
+    Double Precision Ops                                                              inst                  4,160,749,568
+    Double Precision FLOPS / sec                                               inst/second             619,728,722,111.27
+    Single Precision Ops                                                              inst                              0
+    FLOPS / sec                                                                inst/second                              0
+    ---------------------------------------------------------------------- --------------- ------------------------------
+	```
+
 ### AMD Systems
 On AMD machines, I used rocprof to retrieve GPU performance counter metrics
 
-`rocprof --timestamp on --stats -i [rocprof config file] -o [output file path`
+`rocprof --timestamp on --stats -i [rocprof config file] -o [output file path] [executable path]`
 
 I used the following configuration as my rocprof config:
 
