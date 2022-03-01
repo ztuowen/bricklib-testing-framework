@@ -1,0 +1,4 @@
+__global__ void chebyshev_naive(bElem (*Ac)[STRIDE1][STRIDE0], bElem (*Ar)[STRIDE1][STRIDE0], bElem (*Dinv)[STRIDE1][STRIDE0], bElem (*RHS)[STRIDE1][STRIDE0], bElem (*out)[STRIDE1][STRIDE0], bElem *c, bElem (*coeff)[8][8]);
+__global__ void chebyshev_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType Ac, BType Ap, BType Dinv, BType RHS, BType out, bElem *c, bElem (*coeff)[8][8]);
+__global__ void chebyshev_codegen_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType Ac, BType Ap, BType Dinv, BType RHS, BType out, bElem *c, bElem (*coeff)[8][8]);
+__global__ void chebyshev_codegen(bElem (*Ac_arr)[STRIDE1][STRIDE0], bElem (*Ap_arr)[STRIDE1][STRIDE0], bElem (*Dinv_arr)[STRIDE1][STRIDE0], bElem (*RHS_arr)[STRIDE1][STRIDE0], bElem (*out_arr)[STRIDE1][STRIDE0], bElem *c, bElem (*coeff)[8][8]);

@@ -1,0 +1,185 @@
+{
+    "kernel_name": "chebyshev",
+    "c_template": "chebyshev.cu",
+    "h_template": "chebyshev.h",
+    "python_template": "laplacian.py",
+    "naive": {
+        "function": "chebyshev_naive",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [3],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "sequence",
+                    "dimensions": [8, 8, 8],
+                    "type": "bElem",
+                    "sequence": "{
+                        {
+                            {0.0045, 0.007, 0.007, 0.0045}, {}, {}, {}
+                        },
+                        {
+                            {}, {}, {}, {}
+                        },
+                        {
+                            {}, {}, {}, {}
+                        },
+                        {
+                            {}, {}, {}, {}
+                        },
+                    }"
+                }
+            }
+        ]
+    },
+    "naive-bricks": {
+        "function": "laplacian_naive_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "sequence",
+                    "dimensions": [10],
+                    "type": "bElem",
+                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                }
+            }
+        ]
+    },
+    "codegen": {
+        "function": "laplacian_codegen",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem",
+                    "generator": "random"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem",
+                    "generator": "zeros"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "sequence",
+                    "dimensions": [10],
+                    "type": "bElem",
+                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                }
+            }
+        ]
+    },
+    "codegen-bricks": {
+        "function": "laplacian_codegen_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "random",
+                    "type": "bElem",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"]
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": [10],
+                    "type": "bElem",
+                    "generator": "sequence",
+                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                }
+            }
+        ]
+    }
+}
