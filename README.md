@@ -118,7 +118,7 @@ Example output:
     Single Precision Ops                                                              inst                              0
     FLOPS / sec                                                                inst/second                              0
     ---------------------------------------------------------------------- --------------- ------------------------------
-	```
+```
 
 ### AMD Systems
 On AMD machines, I used rocprof to retrieve GPU performance counter metrics
@@ -133,6 +133,7 @@ pmc: TCC_HIT_sum TCC_MISS_sum
 
 kernel: [space separated list of kernel names]
 ```
+
 - Note that memory transactions can be 32B or 64B. To calculate total number of bytes read you will do (TCC_EA_RDREQ_32B_sum * 32) + (TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum) * 64.
 	- Likewise, bytes written can be calculated as (TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum) * 32 + (TCC_EA_WRREQ_64B_sum) * 64
 - This library generates kernels with a known pattern so you can include them in your config file for profiling: `[kernel name]_[kernel type: (naive, naive_bricks, codegen, or codegen_bricks)][size]`
