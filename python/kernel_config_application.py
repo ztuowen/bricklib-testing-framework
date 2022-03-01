@@ -18,7 +18,8 @@ def array_generation(array_name: str, details, device_array_name: str = None):
     elif details["generator"] == "random":
         code = f"{details['type']} *{array_name} = randomArray(" + "{" + ",".join([str(e) for e in details["dimensions"]]) + "});\n"
     elif details["generator"] == "sequence":
-        code = f"{details['type']} {array_name}[] = " + "{" + ",".join([str(e) for e in details["sequence"]]) + "};\n"
+        brackets = "[" + "][".join([str(e) for e in details["dimensions"]]) + "]"
+        code = f"{details['type']} {array_name}{brackets} = {details['sequence']};\n"
     else:
         raise RuntimeError(f"Unknown generator: {details['generator']}")
     
@@ -110,7 +111,11 @@ class KernelConfigApplier:
 
         ### EXECUTE
         wrapped += f"printf(\"Executing {t} {self.kernel_name}, size {size}\\n\");\n"
-        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, /* dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2), */ dim3(1,1,1), dim3(1,1,1),"
+        if "codegen" in t:
+            threads = "VECSIZE"
+        else:
+            threads = "dim3(TILE0, TILE1, TILE2)"
+        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), {threads},"
         if len(brick_grid_params["dimensions"]) > 1:
             wrapped += "(" + brick_grid_params["type"] + "(*)[" + "][".join(brick_grid_params["dimensions"][1:]) + "])"
         else:
@@ -148,7 +153,13 @@ class KernelConfigApplier:
         
         ### EXECUTE
         wrapped += f"printf(\"Executing {t} {self.kernel_name}, size {size}\\n\");\n"
-        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), dim3(TILE0, TILE1, TILE2), "
+        if "codegen" in t:
+            blocks = "dim3(N0/VECSIZE,BLOCK1,BLOCK2)"
+            threads = "VECSIZE"
+        else:
+            blocks = "dim3(BLOCK0,BLOCK1,BLOCK2)"
+            threads = "dim3(TILE0,TILE1,TILE2)"
+        wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, {blocks}, {threads}, "
         for i in range(0, len(arguments)):
             if len(arguments[i]["array"]["dimensions"]) > 1:
                 type_coalesce = arguments[i]["array"]["type"] + "(*)[" + "][".join(arguments[i]["array"]["dimensions"][::-1][1:]) + "]"

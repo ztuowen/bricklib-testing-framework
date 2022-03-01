@@ -1,7 +1,7 @@
 {
     "bricklib-path": "/ccs/home/shirsch/bricklib",
     "dimensions": [512, 512, 512],
-    "brick-dimensions": [8, 8, 8],
+    "brick-dimensions": [8, 8, 32],
     "brick-padding": [32, 32, 32],
     "hip": {
         "vecsize": 64,
@@ -18,9 +18,8 @@
     "kernel-directory": "kernels",
     "kernels": {
         "laplacian": {
-            "sizes": [2],
-            "versions": ["codegen-bricks", "naive-bricks"],
-            "verify": true
+            "sizes": [2,3,5],
+            "versions": ["naive", "naive-bricks", "codegen", "codegen-bricks"],
         }
     }
 }
