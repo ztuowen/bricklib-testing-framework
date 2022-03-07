@@ -19,7 +19,7 @@ if __name__ == "__main__":
     gen_consts_file(args.backend, args.config)
     kernels = decoded["kernels"]
     kernel_objects = map(
-        lambda k: KernelConfigApplier(k, kernels[k]["versions"], (kernels[k]["sizes"] if "sizes" in kernels[k] else [0]), args.backend),
+        lambda k: KernelConfigApplier(k, kernels[k]["versions"], (kernels[k]["sizes"] if "sizes" in kernels[k] else None), args.backend),
         kernels.keys()
     )
 

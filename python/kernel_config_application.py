@@ -32,10 +32,16 @@ def array_generation(array_name: str, details, device_array_name: str = None):
         code += "}\n"
     return code
 
+def check_sizes(SIZES, rules):
+    for rule in rules:
+        exec(f"assert({rule})")
+
 class KernelConfigApplier:
     def __init__(self, kernel_name: str, execution_types: List[str], sizes: List[int], backend):
         self.execution_types = execution_types
         self.sizes = sizes
+        if sizes is None:
+            self.sizes = [0]
         self.kernel_name = kernel_name
         self.kernel_path = path.join(getcwd(), 'kernels', kernel_name)
         self.backend = backend
@@ -46,6 +52,8 @@ class KernelConfigApplier:
         p = path.join(self.kernel_path, 'config.json')
         with open(p, "r") as f:
             self.config = {k:v for (k,v) in json.load(f).items() if k in ALWAYS_INCLUDED_DATA or k in execution_types}
+        if "rules" in self.config:
+            check_sizes(sizes, self.config["rules"])
 
     def wrap_functions(self):
         wrapped_codes = []

@@ -3,6 +3,9 @@
     "c_template": "chebyshev.cu",
     "h_template": "chebyshev.h",
     "python_template": "laplacian.py",
+    "rules": [
+        "SIZES is None"
+    ],
     "naive": {
         "function": "chebyshev_naive",
         "arguments": [

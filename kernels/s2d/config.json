@@ -3,6 +3,11 @@
     "c_template": "laplacian2d.cu",
     "h_template": "laplacian2d.h",
     "python_template": "laplacian2d.py",
+    "rules": [
+        "len(SIZES) == 2",
+        "all(s > 0 for s in SIZES)",
+        "all(s <= 8 for s in SIZES)"
+    ],
     "naive": {
         "function": "laplacian2d_naive",
         "arguments": [

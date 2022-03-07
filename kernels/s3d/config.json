@@ -3,6 +3,11 @@
     "c_template": "laplacian-stencils.cu",
     "h_template": "laplacian.h",
     "python_template": "laplacian.py",
+    "rules": [
+        "len(SIZES) == 3",
+        "all(s > 0 for s in SIZES)",
+        "all(s <= 8 for s in SIZES)"
+    ],
     "naive": {
         "function": "laplacian_naive",
         "arguments": [
