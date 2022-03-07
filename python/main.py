@@ -31,7 +31,7 @@ if __name__ == "__main__":
         to_call.extend(k.wrap_functions())
 
     compile_files=[]
-    with open(os.path.join(cwd, "main.cu"), "w") as f:
+    with open(os.path.join(cwd, "out", "main.cu"), "w") as f:
         f.write('#include "./gen/consts.h"\n')
         f.write(f'#include <brick-{args.backend}.h>\n')
         f.write("""#include <iostream>
@@ -63,6 +63,6 @@ if __name__ == "__main__":
         f.write("}\n")
 
     extra_flags = (decoded[args.backend]["compiler-flags"] if "compiler-flags" in decoded[args.backend] else [])
-    command = [decoded[args.backend]["compiler"], "main.cu", *compile_files, "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper', '-o', (decoded["output"] if "output" in decoded else "main"), *extra_flags]    
+    command = [decoded[args.backend]["compiler"], "out/main.cu", *compile_files, "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper', '-o', (decoded["output"] if "output" in decoded else "main"), *extra_flags]    
     print(" ".join(command))
     subprocess.run(command)
