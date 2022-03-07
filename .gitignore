@@ -3,3 +3,4 @@ gen/*
 core
 **/gen/*
 **/intermediate_gen/*
+**/__pycache__

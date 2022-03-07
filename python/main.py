@@ -19,14 +19,15 @@ if __name__ == "__main__":
     gen_consts_file(args.backend, args.config)
     kernels = decoded["kernels"]
     kernel_objects = map(
-        lambda k: KernelConfigApplier(k, kernels[k]["versions"], kernels[k]["sizes"], args.backend),
+        lambda k: KernelConfigApplier(k, kernels[k]["versions"], (kernels[k]["sizes"] if "sizes" in kernels[k] else [0]), args.backend),
         kernels.keys()
     )
 
     vecscatter_path = os.path.join(decoded["bricklib-path"], "codegen", "vecscatter")
     to_call = []
     for k in kernel_objects:
-        k.generate_intermediate_code().run_codegen_vecscatter(vecscatter_path, python="python3", extras=decoded[args.backend]["codegen-flags"])
+        e = (decoded[args.backend]["codegen-flags"] if "codegen-flags" in decoded[args.backend] else [])
+        k.generate_intermediate_code().run_codegen_vecscatter(vecscatter_path, python="python3", extras=e)
         to_call.extend(k.wrap_functions())
 
     compile_files=[]
@@ -61,6 +62,7 @@ if __name__ == "__main__":
 
         f.write("}\n")
 
-    command = [decoded[args.backend]["compiler"], "main.cu", *compile_files, "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper', '-o', 'main', *(decoded[args.backend]["compiler-flags"])]    
+    extra_flags = (decoded[args.backend]["compiler-flags"] if "compiler-flags" in decoded[args.backend] else [])
+    command = [decoded[args.backend]["compiler"], "main.cu", *compile_files, "-I", f'{decoded["bricklib-path"]}/include', "-L", f'{decoded["bricklib-path"]}/build/src', '-l', 'brickhelper', '-o', (decoded["output"] if "output" in decoded else "main"), *extra_flags]    
     print(" ".join(command))
     subprocess.run(command)

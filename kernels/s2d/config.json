@@ -1,16 +1,16 @@
 {
-    "kernel_name": "laplacian",
-    "c_template": "laplacian-stencils.cu",
-    "h_template": "laplacian.h",
-    "python_template": "laplacian.py",
+    "kernel_name": "s2d",
+    "c_template": "laplacian2d.cu",
+    "h_template": "laplacian2d.h",
+    "python_template": "laplacian2d.py",
     "naive": {
-        "function": "laplacian_naive",
+        "function": "laplacian2d_naive",
         "arguments": [
             {
                 "type": "array",
                 "array": {
                     "generator": "random",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "type": "bElem"
                 }
             },
@@ -18,7 +18,7 @@
                 "type": "array",
                 "array": {
                     "generator": "zeros",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "type": "bElem"
                 }
             },
@@ -34,19 +34,19 @@
         ]
     },
     "naive-bricks": {
-        "function": "laplacian_naive_bricks",
+        "function": "laplacian2d_naive_bricks",
         "arguments": [
             {
                 "type": "brick-grid",
                 "array": {
-                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "dimensions": ["NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
                     "type": "unsigned"
                 }
             },
             {
                 "type": "brick-pointer",
                 "array": {
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "generator": "random",
                     "type": "bElem"
                 }
@@ -55,7 +55,7 @@
                 "type": "brick-pointer",
                 "array": {
                     "generator": "zeros",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "type": "bElem"
                 }
             },
@@ -71,12 +71,12 @@
         ]
     },
     "codegen": {
-        "function": "laplacian_codegen",
+        "function": "laplacian2d_codegen",
         "arguments": [
             {
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "type": "bElem",
                     "generator": "random"
                 }
@@ -84,7 +84,7 @@
             {
                 "type": "array",
                 "array": {
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "type": "bElem",
                     "generator": "zeros"
                 }
@@ -101,12 +101,12 @@
         ]
     },
     "codegen-bricks": {
-        "function": "laplacian_codegen_bricks",
+        "function": "laplacian2d_codegen_bricks",
         "arguments": [
             {
                 "type": "brick-grid",
                 "array": {
-                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "dimensions": ["NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
                     "type": "unsigned"
                 }
             },
@@ -115,13 +115,13 @@
                 "array": {
                     "generator": "random",
                     "type": "bElem",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"]
+                    "dimensions": ["STRIDE0", "STRIDE1"]
                 }
             },
             {
                 "type": "brick-pointer",
                 "array": {
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "dimensions": ["STRIDE0", "STRIDE1"],
                     "generator": "zeros",
                     "type": "bElem"
                 }

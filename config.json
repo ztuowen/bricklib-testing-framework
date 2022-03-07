@@ -3,12 +3,13 @@
     "dimensions": [512, 512, 512],
     "brick-dimensions": [8, 8, 32],
     "brick-padding": [32, 32, 32],
+    "output": "main",
     "hip": {
         "vecsize": 64,
         "brick-dimensions": [8, 8, 8],
         "fold": "8,8",
         "compiler": "hipcc",
-        "compiler-flags": ["-O2", "-fopenmp", "-o", "./out/tester"],
+        "compiler-flags": ["-O2", "-fopenmp"],
         "codegen-flags": ["-c", "cpp", "--", "-DBACKEND=1", "-fopenmp", "-O2", "-I../bricklib/include", "-D__HIP_PLATFORM_HCC__=", "-I/sw/spock/spack-envs/views/rocm-4.1.0/llvm/bin/../lib/clang/12.0.0", "-I/sw/spock/spack-envs/views/rocm-4.1.0/include", "-D__HIP_ROCclr__"]
     },
     "cuda": {
