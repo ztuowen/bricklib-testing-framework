@@ -32,7 +32,7 @@ base = 0
 for i_d in range(-RADIUS, RADIUS + 1):
     for j_d in range(-RADIUS, RADIUS + 1):
         for k_d in range(-RADIUS, RADIUS + 1):
-            base += coeffs[i_d + RADIUS][j_d + RADIUS][k_d + RADIUS] * ac(i + i_d, j + j_d, k + k_d)
+            base += coeffs(i_d + RADIUS, j_d + RADIUS, k_d + RADIUS) * ac(i + i_d, j + j_d, k + k_d)
 final = ac(i, j, k) + cs[0] * (ac(i, j, k) + ap(i, j, k)) + c[1] * dinv(i, j, k) * (rhs(i, j, k) + (ac(i, j, k) + c[2] * base))
 out(i, j, k).assign(final)
 STENCIL = [out]

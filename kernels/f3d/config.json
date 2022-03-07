@@ -1,35 +1,11 @@
 {
-    "kernel_name": "chebyshev",
-    "c_template": "chebyshev.cu",
-    "h_template": "chebyshev.h",
-    "python_template": "laplacian.py",
+    "kernel_name": "f3d",
+    "c_template": "f3d.cu",
+    "h_template": "f3d.h",
+    "python_template": "f3d.py",
     "naive": {
-        "function": "chebyshev_naive",
+        "function": "f3d_naive",
         "arguments": [
-            {
-                "type": "array",
-                "array": {
-                    "generator": "random",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
-                    "type": "bElem"
-                }
-            },
-            {
-                "type": "array",
-                "array": {
-                    "generator": "random",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
-                    "type": "bElem"
-                }
-            },
-            {
-                "type": "array",
-                "array": {
-                    "generator": "random",
-                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
-                    "type": "bElem"
-                }
-            },
             {
                 "type": "array",
                 "array": {
@@ -50,23 +26,14 @@
                 "type": "array",
                 "array": {
                     "generator": "random",
-                    "dimensions": [3],
-                    "type": "bElem"
-                }
-            },
-            {
-                "type": "array",
-                "array": {
-                    "generator": "sequence",
                     "dimensions": [8, 8, 8],
-                    "type": "bElem",
-                    "sequence": "python:chebyshev_coeff_gen.py"
+                    "type": "bElem"
                 }
             }
         ]
     },
     "naive-bricks": {
-        "function": "laplacian_naive_bricks",
+        "function": "f3d_naive_bricks",
         "arguments": [
             {
                 "type": "brick-grid",
@@ -94,16 +61,15 @@
             {
                 "type": "array",
                 "array": {
-                    "generator": "sequence",
-                    "dimensions": [10],
-                    "type": "bElem",
-                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                    "generator": "random",
+                    "dimensions": [8, 8, 8],
+                    "type": "bElem"
                 }
             }
         ]
     },
     "codegen": {
-        "function": "laplacian_codegen",
+        "function": "f3d_codegen",
         "arguments": [
             {
                 "type": "array",
@@ -124,16 +90,15 @@
             {
                 "type": "array",
                 "array": {
-                    "generator": "sequence",
-                    "dimensions": [10],
-                    "type": "bElem",
-                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                    "generator": "random",
+                    "dimensions": [8, 8, 8],
+                    "type": "bElem"
                 }
             }
         ]
     },
     "codegen-bricks": {
-        "function": "laplacian_codegen_bricks",
+        "function": "f3d_codegen_bricks",
         "arguments": [
             {
                 "type": "brick-grid",
@@ -161,10 +126,9 @@
             {
                 "type": "array",
                 "array": {
-                    "dimensions": [10],
-                    "type": "bElem",
-                    "generator": "sequence",
-                    "sequence": "{1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1}"
+                    "generator": "random",
+                    "dimensions": [8, 8, 8],
+                    "type": "bElem"
                 }
             }
         ]

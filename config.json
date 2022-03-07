@@ -19,7 +19,7 @@
     "kernels": {
         "laplacian": {
             "sizes": [2,3,5],
-            "versions": ["naive", "naive-bricks", "codegen", "codegen-bricks"],
+            "versions": ["naive", "naive-bricks", "codegen", "codegen-bricks"]
         }
     }
 }

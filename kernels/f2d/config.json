@@ -1,0 +1,136 @@
+{
+    "kernel_name": "f2d",
+    "c_template": "f2d.cu",
+    "h_template": "f2d.h",
+    "python_template": "f2d.py",
+    "naive": {
+        "function": "f2d_naive",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [8, 8],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "naive-bricks": {
+        "function": "f2d_naive_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [8, 8],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen": {
+        "function": "f2d_codegen",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "type": "bElem",
+                    "generator": "random"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "type": "bElem",
+                    "generator": "zeros"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [8, 8],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen-bricks": {
+        "function": "f2d_codegen_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "generator": "random",
+                    "type": "bElem",
+                    "dimensions": ["STRIDE0", "STRIDE1"]
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [8, 8],
+                    "type": "bElem"
+                }
+            }
+        ]
+    }
+}
