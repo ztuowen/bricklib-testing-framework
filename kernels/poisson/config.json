@@ -1,0 +1,107 @@
+{
+    "kernel_name": "poisson",
+    "c_template": "poisson.cu",
+    "h_template": "poisson.h",
+    "python_template": "poisson.py",
+    "rules": [
+        "SIZES is None"
+    ],
+    "naive": {
+        "function": "poisson_naive",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen": {
+        "function": "poisson_codegen",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "naive-bricks": {
+        "function": "poisson_naive_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen-bricks": {
+        "function": "poisson_codegen_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            }
+        ]
+    }
+}
