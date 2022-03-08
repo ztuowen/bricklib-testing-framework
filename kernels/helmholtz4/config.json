@@ -1,0 +1,267 @@
+{
+    "kernel_name": "helmholtz4",
+    "c_template": "helmholtz4.cu",
+    "h_template": "helmholtz4.h",
+    "python_template": "helmholtz4.py",
+    "rules": [
+        "SIZES is None"
+    ],
+    "naive": {
+        "function": "helmholtz4_naive",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [3],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen": {
+        "function": "helmholtz4_codegen",
+        "arguments": [
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "zeros",
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "generator": "random",
+                    "dimensions": [3],
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "naive-bricks": {
+        "function": "helmholtz4_naive_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": [3],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            }
+        ]
+    },
+    "codegen-bricks": {
+        "function": "helmholtz4_codegen_bricks",
+        "arguments": [
+            {
+                "type": "brick-grid",
+                "array": {
+                    "dimensions": ["NAIVE_BSTRIDE2", "NAIVE_BSTRIDE1", "NAIVE_BSTRIDE0"],
+                    "type": "unsigned"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "brick-pointer",
+                "array": {
+                    "dimensions": ["STRIDE0", "STRIDE1", "STRIDE2"],
+                    "generator": "zeros",
+                    "type": "bElem"
+                }
+            },
+            {
+                "type": "array",
+                "array": {
+                    "dimensions": [3],
+                    "generator": "random",
+                    "type": "bElem"
+                }
+            }
+        ]
+    }
+}
