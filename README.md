@@ -159,6 +159,11 @@ Each kernel has a `config.json` that helps the python code to generate the neede
 	"c_template": // string name of the file with c code
 	"h_template": // string name of the file with the c header definitions
 	"python_template": // string name of the file with python code for code gen
+	"rules": [
+		// string representations of simple python expressions returning a boolean
+		// use SIZES variable
+		// ex.         ["len(SIZES) == 3", "all(s <= 8 for s in SIZES)"] 
+	],
 	[kernel-type]: {
 		"function": // function name for this kernel type definition
 		"arguments": [
