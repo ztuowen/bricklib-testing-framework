@@ -79,9 +79,9 @@ __global__ void helmholtz4_naive(bElem (*x)[STRIDE1][STRIDE0], bElem (*alpha)[ST
 __global__ void helmholtz4_codegen(bElem (*x_arr)[STRIDE1][STRIDE0], bElem (*alpha_arr)[STRIDE1][STRIDE0], 
   bElem (*beta_i_arr)[STRIDE1][STRIDE0], bElem (*beta_j_arr)[STRIDE1][STRIDE0], bElem (*beta_k_arr)[STRIDE1][STRIDE0], 
   bElem (*out_arr)[STRIDE1][STRIDE0], bElem *c) {
-    unsigned i = OFF0 + (blockIdx_x) * TILE0 + threadIdx_x;
-    unsigned j = OFF1 + (blockIdx_y) * TILE1 + threadIdx_y;
-    unsigned k = OFF2 + (blockIdx_z) * TILE2 + threadIdx_z;
+    unsigned i = OFF0 + (blockIdx.x) * TILE0 + threadIdx.x;
+    unsigned j = OFF1 + (blockIdx.y) * TILE1 + threadIdx.y;
+    unsigned k = OFF2 + (blockIdx.z) * TILE2 + threadIdx.z;
 
     tile("$PYTHON", VSVEC, (TILE2, TILE1, VECSIZE), ("k", "j", "i"), (1, 1, VECSIZE));
 }
@@ -98,10 +98,10 @@ __global__ void helmholtz4_codegen(bElem (*x_arr)[STRIDE1][STRIDE0], bElem (*alp
 __global__ void helmholtz4_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType x, BType alpha,
   BType beta_i, BType beta_j, BType beta_k,
   BType out, bElem *c) {
-    unsigned b = grid[blockIdx_z + GB2][blockIdx_y + GB1][blockIdx_x + GB0];
-    unsigned i = threadIdx_x;
-    unsigned j = threadIdx_y;
-    unsigned k = threadIdx_z;
+    unsigned b = grid[blockIdx.z + GB2][blockIdx.y + GB1][blockIdx.x + GB0];
+    unsigned i = threadIdx.x;
+    unsigned j = threadIdx.y;
+    unsigned k = threadIdx.z;
 
     bElem c1 = c[0];
     bElem c2 = c[1];
@@ -169,7 +169,7 @@ __global__ void helmholtz4_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_B
 __global__ void helmholtz4_codegen_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType x, BType alpha,
   BType beta_i, BType beta_j, BType beta_k,
   BType out, bElem *c) {
-    unsigned b = grid[blockIdx_z + GB2][blockIdx_y + GB1][blockIdx_x + GB0];
+    unsigned b = grid[blockIdx.z + GB2][blockIdx.y + GB1][blockIdx.x + GB0];
     brick("$PYTHON", VSVEC, (TILE2, TILE1, TILE0), (FOLD), b);
 }
 // $END codegen-bricks

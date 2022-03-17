@@ -6,8 +6,8 @@
 // $START naive
 __global__ void f2d_naive(bElem (*in)[STRIDE0], bElem (*out)[STRIDE0], bElem (*c)[8]) {
     const size_t radius = $SIZE;
-    unsigned i = OFF0 + (blockIdx_x) * TILE0 + threadIdx_x;
-    unsigned j = OFF1 + (blockIdx_y) * TILE1 + threadIdx_y;
+    unsigned i = OFF0 + (blockIdx.x) * TILE0 + threadIdx.x;
+    unsigned j = OFF1 + (blockIdx.y) * TILE1 + threadIdx.y;
 
     bElem base = 0;
     #pragma unroll
@@ -23,9 +23,9 @@ __global__ void f2d_naive(bElem (*in)[STRIDE0], bElem (*out)[STRIDE0], bElem (*c
 
 // $START naive-bricks
 __global__ void f2d_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE0], BType bIn, BType bOut, bElem (*c)[8]) {
-    unsigned b = grid[blockIdx_y + GB1][blockIdx_x + GB0];
-    unsigned i = threadIdx_x;
-    unsigned j = threadIdx_y;
+    unsigned b = grid[blockIdx.y + GB1][blockIdx.x + GB0];
+    unsigned i = threadIdx.x;
+    unsigned j = threadIdx.y;
 
     bElem base = 0;
     #pragma unroll
@@ -44,8 +44,8 @@ __global__ void f2d_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE0], BType bIn, BT
 #define bOut(a, b) arr_out[b][a]
 
 __global__ void f2d_codegen(bElem (*arr_in)[STRIDE0], bElem (*arr_out)[STRIDE0], bElem (*c)[8]) {
-    long j = OFF1 + (blockIdx_y * TILE1);
-    long i = OFF0 + (blockIdx_x * VECSIZE);
+    long j = OFF1 + (blockIdx.y * TILE1);
+    long i = OFF0 + (blockIdx.x * VECSIZE);
     tile("$PYTHON", VSVEC, (TILE1, VECSIZE), ("j", "i"), (1, VECSIZE));
 }
 
@@ -55,7 +55,7 @@ __global__ void f2d_codegen(bElem (*arr_in)[STRIDE0], bElem (*arr_out)[STRIDE0],
 
 // $START codegen-bricks
 __global__ void f32_codegen_bricks(unsigned (*grid)[NAIVE_BSTRIDE0], BType bIn, BType bOut, bElem (*c)[8]) {
-    unsigned b = grid[blockIdx_y + GB1][blockIdx_x + GB0];
+    unsigned b = grid[blockIdx.y + GB1][blockIdx.x + GB0];
     brick("$PYTHON", VSVEC, (TILE1, TILE0), (FOLD), b);
 }
 // $END codegen-bricks

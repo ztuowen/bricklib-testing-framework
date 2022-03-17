@@ -10,15 +10,18 @@
         "fold": "8,8",
         "compiler": "hipcc",
         "compiler-flags": ["-O2", "-fopenmp"],
-        "codegen-flags": ["-c", "cpp", "--", "-DBACKEND=1", "-fopenmp", "-O2", "-I../bricklib/include", "-D__HIP_PLATFORM_HCC__=", "-I/sw/spock/spack-envs/views/rocm-4.1.0/llvm/bin/../lib/clang/12.0.0", "-I/sw/spock/spack-envs/views/rocm-4.1.0/include", "-D__HIP_ROCclr__"]
+        "codegen-flags": ["-c", "cpp", "--", "-DBACKEND=1", "-fopenmp", "-O2", "-D__HIP_PLATFORM_HCC__=", "-I/sw/spock/spack-envs/views/rocm-4.1.0/llvm/bin/../lib/clang/12.0.0", "-I/sw/spock/spack-envs/views/rocm-4.1.0/include", "-D__HIP_ROCclr__"]
     },
     "cuda": {
         "vecsize": 32,
-        "fold": "4,8"
+        "fold": "4,8",
+        "codegen-flags": ["-c", "cpp", "--", "-I/uufs/chpc.utah.edu/sys/installdir/cuda/11.3.0/include"],
+        "compiler" : "nvcc",
+        "compiler-flags": ["-O2", "--compiler-options=-O2 -fopenmp", "-I."]
     },
     "kernel-directory": "kernels",
     "kernels": {
-        "laplacian": {
+        "s3d": {
             "sizes": [2,3,5],
             "versions": ["naive", "naive-bricks", "codegen", "codegen-bricks"]
         }

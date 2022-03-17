@@ -24,12 +24,17 @@ if __name__ == "__main__":
     )
 
     vecscatter_path = os.path.join(decoded["bricklib-path"], "codegen", "vecscatter")
+    brick_include_path = os.path.join(decoded["bricklib-path"], "include")
     to_call = []
     for k in kernel_objects:
         e = (decoded[args.backend]["codegen-flags"] if "codegen-flags" in decoded[args.backend] else [])
+        if "--" not in e:
+            e.append("--")
+        e.append("-I" + brick_include_path)
         k.generate_intermediate_code().run_codegen_vecscatter(vecscatter_path, python="python3", extras=e)
         to_call.extend(k.wrap_functions())
-
+    
+    os.makedirs(os.path.join(cwd, "out"), exist_ok=True)
     compile_files=[]
     with open(os.path.join(cwd, "out", "main.cu"), "w") as f:
         f.write('#include "./gen/consts.h"\n')
