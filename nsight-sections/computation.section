@@ -169,4 +169,8 @@ Header {
     Label: "L1 Writes Miss"
     Name: "l1_stores_miss"
   }
+  Metrics {
+    Label: "Duration"
+    Name: "gpu__time_duration.sum"
+  }
 }

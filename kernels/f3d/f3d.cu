@@ -27,6 +27,7 @@ __global__ void f3d_naive(bElem (*in)[STRIDE1][STRIDE0], bElem (*out)[STRIDE1][S
 
 // $START naive-bricks
 __global__ void f3d_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0], BType bIn, BType bOut, bElem (*c)[8][8]) {
+    const size_t radius = $SIZE;
     unsigned b = grid[blockIdx.z + GB2][blockIdx.y + GB1][blockIdx.x + GB0];
     unsigned i = threadIdx.x;
     unsigned j = threadIdx.y;
@@ -45,7 +46,7 @@ __global__ void f3d_naive_bricks(unsigned (*grid)[NAIVE_BSTRIDE1][NAIVE_BSTRIDE0
     }
     bOut[b][i][j][k] = base;
 }
-// $END naive-brick
+// $END naive-bricks
 
 // $START codegen
 #define bIn(a, b, c) arr_in[c][b][a]
