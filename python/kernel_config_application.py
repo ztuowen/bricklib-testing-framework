@@ -123,6 +123,7 @@ class KernelConfigApplier:
             threads = "VECSIZE"
         else:
             threads = "dim3(TILE0, TILE1, TILE2)"
+        wrapped += "for (int iter = 0; iter < 100; ++iter)\n"
         wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, dim3(BLOCK0, BLOCK1, BLOCK2), {threads},"
         if len(brick_grid_params["dimensions"]) > 1:
             wrapped += "(" + brick_grid_params["type"] + "(*)[" + "][".join(brick_grid_params["dimensions"][1:]) + "])"
@@ -167,6 +168,7 @@ class KernelConfigApplier:
         else:
             blocks = "dim3(BLOCK0,BLOCK1,BLOCK2)"
             threads = "dim3(TILE0,TILE1,TILE2)"
+        wrapped += "for (int iter = 0; iter < 100; ++iter)\n"
         wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, {blocks}, {threads}, "
         for i in range(0, len(arguments)):
             if len(arguments[i]["array"]["dimensions"]) > 1:
