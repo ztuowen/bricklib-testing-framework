@@ -18,8 +18,8 @@ input = Grid("bIn", 3)
 output = Grid("bOut", 3)
 
 base = 0
-for i_d in range(-RADIUS, RADIUS + 1):
-    for j_d in range(-RADIUS, RADIUS + 1):
-        base += input(i_d + i, j_d + j) * coeffs[i_d + RADIUS][j_d + RADIUS]
+for i_d in range(-SIZE, SIZE + 1):
+    for j_d in range(-SIZE, SIZE + 1):
+        base += input(i_d + i, j_d + j) * coeffs[i_d + SIZE][j_d + SIZE]
 output(i, j).assign(base)
 STENCIL = [output]

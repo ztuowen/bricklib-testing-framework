@@ -4,7 +4,6 @@
     "h_template": "f3d.h",
     "python_template": "f3d.py",
     "rules": [
-        "len(SIZES) == 3",
         "all(s <= 8 for s in SIZES)",
         "all(s > 0 for s in SIZES)"
     ],

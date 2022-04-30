@@ -134,7 +134,8 @@ class KernelConfigApplier:
             wrapped += f", brick{i}"
         for i in range(0, len(other_args)):
             if len(other_args[i]["array"]["dimensions"]) > 1:
-                type_coalesce = other_args[i]["array"]["type"] + "(*)[" + "][".join(other_args[i]["array"]["dimensions"][::-1][1:]) + "]"
+                dimStr = [str(d) for d in other_args[i]["array"]["dimensions"]]
+                type_coalesce = other_args[i]["array"]["type"] + "(*)[" + "][".join(dimStr[::-1][1:]) + "]"
             else:
                 type_coalesce = f"{other_args[i]['array']['type']} *"
             wrapped += f", ({type_coalesce}) device_arr{i}"
@@ -172,7 +173,8 @@ class KernelConfigApplier:
         wrapped += f"gpuExecKernel({self.kernel_name}_{t.replace('-','_')}{size}, {blocks}, {threads}, "
         for i in range(0, len(arguments)):
             if len(arguments[i]["array"]["dimensions"]) > 1:
-                type_coalesce = arguments[i]["array"]["type"] + "(*)[" + "][".join(arguments[i]["array"]["dimensions"][::-1][1:]) + "]"
+                dimStr = [str(d) for d in arguments[i]["array"]["dimensions"]]
+                type_coalesce = arguments[i]["array"]["type"] + "(*)[" + "][".join(dimStr[::-1][1:]) + "]"
             else:
                 type_coalesce = f"{arguments[i]['array']['type']}*"
             wrapped += f"({type_coalesce}) dev_arg{i}"
@@ -228,9 +230,12 @@ class KernelConfigApplier:
                         current_type = t
                         codes[current_type] = ""
                         start_scanning = False
-                elif line.strip().startswith("//") and "$END" in line and line.split()[-1] == current_type:
-                    current_type = ""
-                    start_scanning = True
+                elif line.strip().startswith("//") and "$END" in line:
+                    if line.split()[-1] == current_type:
+                        current_type = ""
+                        start_scanning = True
+                    else:
+                        raise RuntimeError("Unmatched end")
                 else:
                     codes[current_type] += line
         return (header, codes)
