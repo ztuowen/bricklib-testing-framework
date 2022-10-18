@@ -254,7 +254,6 @@ class KernelConfigApplier:
                     pfo.write(temp_contents.replace("$SIZE", str(size)))
         
         gen_file_path = path.join(gen_dir, self.kernel_name + ".cu")
-        default_written = []
         with open(path.join(self.kernel_path, "intermediate_gen", self.kernel_name + ".h"), "w") as h:
             with open(path.join(self.kernel_path, self.config["h_template"]), "r") as ht:
                 h.write(ht.read())
@@ -273,54 +272,13 @@ class KernelConfigApplier:
                             .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
                             .replace("$SIZE", str(size)) \
                             .replace(self.config[type]["function"], new_kernel_name, 1)
-                        # find the function signture and write into header file
+                        # find the function signature and write into header file
                         for line in code.splitlines():
                             if new_kernel_name in line:
                                 h.write(line.rstrip().rstrip("{").rstrip())
                                 h.write(";\n")
                                 break
                         f.write(code)
-                        continue
-                        
-                        # if "codegen" in type:
-                        #     code = code \
-                        #         .replace("$PYTHON", path.join(gen_dir, temp_name + str(size) + ".py")) \
-                        #         .replace(self.config[type]["function"], f"{self.kernel_name}_{type.replace('-','_')}{size}", 1)
-                        #     for line in code.splitlines():
-                        #         if f"{self.kernel_name}_{type.replace('-','_')}{size}" in line:
-                        #             h.write(line.rstrip("{").rstrip())
-                        #             h.write(";\n")
-                        #             break
-                            
-                        #     f.write(code)
-                        # else:
-                        #     args = self.config[type]["arguments"]
-                        #     size_replace_index = -1
-                        #     for (i, arg) in enumerate(args):
-                        #         if "generator" in arg and arg["generator"] == "size":
-                        #             size_replace_index = i
-                        #             break
-                        #     if size_replace_index == -1:
-                        #         f.write(code)
-                        #     else:
-                        #         if type not in default_written:
-                        #             f.write(code)
-                        #             default_written.append(type)
-                        #         h.write(f"#define {self.kernel_name}_{type.replace('-', '_')}{size}(")
-                        #         for i in range(0, len(args)):
-                        #             if i != size_replace_index:
-                        #                 h.write(chr(i+97))
-                        #                 if i != (len(args) - 2):
-                        #                     h.write(", ")
-                        #         h.write(f") {self.config[type]['function']}(")
-                        #         for i in range(0, len(args)):
-                        #             if i != size_replace_index:
-                        #                 h.write(chr(i + 97))
-                        #             else:
-                        #                 h.write(str(size))
-                        #             if i != (len(args) - 1):
-                        #                 h.write(", ")
-                        #         h.write(")\n")
         return self
 
 
